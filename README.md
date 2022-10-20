@@ -7,7 +7,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 1D area - line defined by 2 points in space.
 
 * Linear elements
-![Screenshot](images/example_points_2_type_1.png)
+<img src="images/example_points_2_type_1.png" width=50% height=50%>
 
 * Quadratic elements
 ![Screenshot](images/example_points_2_type_2.png)
@@ -20,7 +20,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 ![Screenshot](images/example_points_4_type_1.png)
 
 * Elements with triangular base ver. 1
-![Screenshot](images/example_points_4_type_2.jpg)
+![Screenshot](images/example_points_4_type_2.png)
 
 * Elements with triangular base ver. 2
 ![Screenshot](images/example_points_4_type_3.png)
