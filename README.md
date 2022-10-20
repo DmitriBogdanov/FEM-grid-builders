@@ -13,7 +13,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 
 <img src="images/example_points_2_type_2.png" width=40% height=40%>
 
-## 1D grids
+## 2D grids
 
 2D area - 2nd order surface defined by 4 points in space.
 
