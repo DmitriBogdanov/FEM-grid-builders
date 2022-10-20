@@ -10,6 +10,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 <img src="images/example_points_2_type_1.png" width=50% height=50%>
 
 * Quadratic elements
+
 ![Screenshot](images/example_points_2_type_2.png)
 
 ## 1D grids
@@ -17,15 +18,19 @@ Contains various grid builders for finite element method. Grid builders implemen
 2D area - 2nd order surface defined by 4 points in space.
 
 * Elements with quadrilateral base
+
 ![Screenshot](images/example_points_4_type_1.png)
 
 * Elements with triangular base ver. 1
+
 ![Screenshot](images/example_points_4_type_2.png)
 
 * Elements with triangular base ver. 2
+
 ![Screenshot](images/example_points_4_type_3.png)
 
 * Elements with triangular base ver. 3
+
 ![Screenshot](images/example_points_4_type_4.png)
 
 
