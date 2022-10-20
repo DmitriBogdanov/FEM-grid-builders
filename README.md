@@ -7,26 +7,26 @@ Contains various grid builders for finite element method. Grid builders implemen
 1D area - line defined by 2 points in space.
 
 * Linear elements
-![Screenshot](images/example_points_2_type_1.jpg)
+![Screenshot](images/example_points_2_type_1.png)
 
 * Quadratic elements
-![Screenshot](images/example_points_2_type_2.jpg)
+![Screenshot](images/example_points_2_type_2.png)
 
 ## 1D grids
 
 2D area - 2nd order surface defined by 4 points in space.
 
 * Elements with quadrilateral base
-![Screenshot](images/example_points_4_type_1.jpg)
+![Screenshot](images/example_points_4_type_1.png)
 
 * Elements with triangular base ver. 1
 ![Screenshot](images/example_points_4_type_2.jpg)
 
 * Elements with triangular base ver. 2
-![Screenshot](images/example_points_4_type_3.jpg)
+![Screenshot](images/example_points_4_type_3.png)
 
 * Elements with triangular base ver. 3
-![Screenshot](images/example_points_4_type_4.jpg)
+![Screenshot](images/example_points_4_type_4.png)
 
 
 ## Usage
@@ -38,7 +38,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 | NE1 NE2                                    | Number of elements on a line (1 value for 2 points, 2 values for 4 points) |
 | type                                       | Type of the element (for 2 point - 1 or 2, for 4 point - 1, 2, 3 or 4)     |
 
-By default both "main.cpp" and "Visualization.nb" look for files in current folder.
+NOTE: By default both "main.cpp" and "Visualization.nb" look for files in the current folder.
 
 | Output file format                                                                              |                                                                                               |
 |-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
