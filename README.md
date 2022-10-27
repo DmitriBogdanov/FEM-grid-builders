@@ -42,7 +42,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 | NE1 NE2                                    | Number of elements on a line (1 value for 2 points, 2 values for 4 points) |
 | type                                       | Type of the element (for 2 point - 1 or 2, for 4 point - 1, 2, 3 or 4)     |
 
-NOTE: By default both "main.cpp" and "Visualization.nb" look for files in the current folder.
+NOTE: By default both "main.cpp" and "Visualization.m" look for files in the current folder.
 
 | Output file format                                                                              |                                                                                               |
 |-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -56,6 +56,10 @@ NOTE: By default both "main.cpp" and "Visualization.nb" look for files in the cu
 To launch "Visualization.nb" one may need an access to a valid Wolfram Mathematica license.
 
 ## Version History
+
+* 00.05
+    * Fixed an issue that caused incorrect enumeration of elements for different NE1 and NE2
+    * Replaced Mathematica notebook with a package
 
 * 00.04
     * Fixed an oversight that caused incorrect behaviour when 3rd point didn't belong to the same plane as others

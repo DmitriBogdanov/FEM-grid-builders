@@ -21,66 +21,66 @@ uint func_NP(uint type, uint inp_NE1, uint inp_NE2) {
 
 void type1_write(std::ofstream& outFile, uint NP1, uint NP2, uint NE1, uint NE2) {
 	uint counter = 1;
-	for (uint i = 0; i < NE1; ++i)
-		for (uint j = 0; j < NE2; ++j)
+	for (uint i = 0; i < NE2; ++i)
+		for (uint j = 0; j < NE1; ++j)
 			outFile
-			<< ' ' << counter++
-			<< ' ' << 4
-			<< ' ' << i * NP1 + j + 1
-			<< ' ' << i * NP1 + j + 2
-			<< ' ' << i * NP1 + j + 2 + NP2
-			<< ' ' << i * NP1 + j + 2 + NP2 - 1
-			<< '\n';
+				<< ' ' << counter++
+				<< ' ' << 4
+				<< ' ' << i * NP1 + j + 1
+				<< ' ' << i * NP1 + j + 2
+				<< ' ' << i * NP1 + j + 2 + NP1
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
+				<< '\n';
+			
 }
 
 void type2_write(std::ofstream& outFile, uint NP1, uint NP2, uint NE1, uint NE2) {
 	uint counter = 1;
-	for (uint i = 0; i < NE1; ++i)
-		for (uint j = 0; j < NE2; ++j)
+	for (uint i = 0; i < NE2; ++i)
+		for (uint j = 0; j < NE1; ++j)
 			outFile
-			// top-left element
-			<< ' ' << counter++
-			<< ' ' << 3
-			<< ' ' << i * NP1 + j + 1
-			<< ' ' << i * NP1 + j + 2 + NP2
-			<< ' ' << i * NP1 + j + 2 + NP2 - 1
-			<< '\n'
-			// bottom-right element
-			<< ' ' << counter++
-			<< ' ' << 3
-			<< ' ' << i * NP1 + j + 1
-			<< ' ' << i * NP1 + j + 2
-			<< ' ' << i * NP1 + j + 2 + NP2
-			<< '\n';
+				// top-left element
+				<< ' ' << counter++
+				<< ' ' << 3
+				<< ' ' << i * NP1 + j + 1
+				<< ' ' << i * NP1 + j + 2 + NP1
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
+				<< '\n'
+				// bottom-right element
+				<< ' ' << counter++
+				<< ' ' << 3
+				<< ' ' << i * NP1 + j + 1
+				<< ' ' << i * NP1 + j + 2
+				<< ' ' << i * NP1 + j + 2 + NP1
+				<< '\n';
 }
 
 void type3_write(std::ofstream& outFile, uint NP1, uint NP2, uint NE1, uint NE2) {
 	uint counter = 1;
-	for (uint i = 0; i < NE1; ++i)
-		for (uint j = 0; j < NE2; ++j)
+	for (uint i = 0; i < NE2; ++i)
+		for (uint j = 0; j < NE1; ++j)
 			outFile
-			// bottom-left element
-			<< ' ' << counter++
-			<< ' ' << 3
-			<< ' ' << i * NP1 + j + 1
-			<< ' ' << i * NP1 + j + 2
-			<< ' ' << i * NP1 + j + 2 + NP2 - 1
-			<< '\n'
-			// top-right element
-			<< ' ' << counter++
-			<< ' ' << 3
-			<< ' ' << i * NP1 + j + 2
-			<< ' ' << i * NP1 + j + 2 + NP2
-			<< ' ' << i * NP1 + j + 2 + NP2 - 1
-			<< '\n';
+				// bottom-left element
+				<< ' ' << counter++
+				<< ' ' << 3
+				<< ' ' << i * NP1 + j + 1
+				<< ' ' << i * NP1 + j + 2
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
+				<< '\n'
+				// top-right element
+				<< ' ' << counter++
+				<< ' ' << 3
+				<< ' ' << i * NP1 + j + 2
+				<< ' ' << i * NP1 + j + 2 + NP1
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
+				<< '\n';
 }
 
 void type4_write(std::ofstream& outFile, uint NP1, uint NP2, uint NE1, uint NE2) {
 	uint counter = 1;
 	uint centerCounter = 1;
-	for (uint i = 0; i < NE1; ++i)
-		for (uint j = 0; j < NE2; ++j)
-		{
+	for (uint i = 0; i < NE2; ++i)
+		for (uint j = 0; j < NE1; ++j) {
 			outFile
 				// bottom element
 				<< ' ' << counter++
@@ -93,20 +93,20 @@ void type4_write(std::ofstream& outFile, uint NP1, uint NP2, uint NE1, uint NE2)
 				<< ' ' << counter++
 				<< ' ' << 3
 				<< ' ' << i * NP1 + j + 2
-				<< ' ' << i * NP1 + j + 2 + NP2
+				<< ' ' << i * NP1 + j + 2 + NP1
 				<< ' ' << NP1 * NP2 + centerCounter
 				<< '\n'
 				// top element
 				<< ' ' << counter++
 				<< ' ' << 3
-				<< ' ' << i * NP1 + j + 2 + NP2 - 1
-				<< ' ' << i * NP1 + j + 2 + NP2
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
+				<< ' ' << i * NP1 + j + 2 + NP1
 				<< ' ' << NP1 * NP2 + centerCounter
 				<< '\n'
 				// left element
 				<< ' ' << counter++
 				<< ' ' << 3
-				<< ' ' << i * NP1 + j + 2 + NP2 - 1
+				<< ' ' << i * NP1 + j + 2 + NP1 - 1
 				<< ' ' << i * NP1 + j + 1
 				<< ' ' << NP1 * NP2 + centerCounter
 				<< '\n';
