@@ -53,7 +53,7 @@ NOTE: By default both "main.cpp" and "Visualization.m" look for files in the cur
 
 ## Requirements
 
-To launch "Visualization.nb" one may need an access to a valid Wolfram Mathematica license.
+To launch "Visualization.m" one may need an access to a valid Wolfram Mathematica license.
 
 ## Version History
 
