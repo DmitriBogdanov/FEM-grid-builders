@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "grid_builders.h"
+#include "FEMGrid.h"
 
 
 // #####################
@@ -42,7 +42,10 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		build_point_2(type, pointA, pointB, NE);
+		FEMGrid grid;
+
+		grid.construct_grid_2(pointA, pointB, NE, type);
+		grid.save_to_file("output.txt");
 
 		std::cout << ">>> Done\n";
 	}
@@ -74,11 +77,30 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		build_point_4(type, pointA, pointB, pointC, pointD, NE1, NE2);
+		FEMGrid grid;
+
+		grid.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
+		grid.save_to_file("output.txt");
 
 		std::cout << ">>> Done\n";
+
+		/// TESTING
+		auto neighboors = grid.get_elements_adjacent_to_vertex(0);
+		for (auto &el : neighboors) std::cout << "   " << el;
+
+		std::cout << "\n\n";
+
+		/// TESTING
+		auto neighboorsPoints = grid.get_vertices_adjacent_to_vertex(0);
+		for (auto &point : neighboorsPoints) std::cout << "   " << point;
+
+		std::cout << "\n\n";
+
+		/// TESTING
+		for (auto &centroid : grid._centroids) std::cout << centroid.toString() << "\n";
 	}
 	else exit_with_error("NP not 2 or 4");
+	
 
 	// Log a copy of input
 	inFile.clear();

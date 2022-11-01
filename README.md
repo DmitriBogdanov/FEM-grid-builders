@@ -1,4 +1,4 @@
-# FEM 
+# FEM (Finite Element Method) grid builders
 
 Contains various grid builders for finite element method. Grid builders implemented in C++, visualization done through "Wolfram Mathematica" package.
 
@@ -56,6 +56,13 @@ NOTE: By default both "main.cpp" and "Visualization.m" look for files in the cur
 To launch "Visualization.m" one may need an access to a valid Wolfram Mathematica license.
 
 ## Version History
+
+* 01.01
+    * Vastly changed code structure, instead of methods writing grids straight to files was implemented a general class that can build grids, hold their metadata, operate on them and save results to a file in the same format as before
+    * Changed indexation to start from 0 instead of 1, so internal indixation is the same as displayed
+    * Bug fixes related to new indexation
+    * Added element centroids to stored metadata
+    * Implemented methods for finding adjacent elements and vertices
 
 * 00.05
     * Fixed an issue that caused incorrect enumeration of elements for different NE1 and NE2
