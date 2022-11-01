@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <optional>
 
 using T = double;
 using uint = unsigned int;
