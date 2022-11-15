@@ -4,9 +4,12 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include <functional>
+#include <omp.h>
 
 using T = double;
-using uint = unsigned int;
+using uint = unsigned long long;
+static const double PI = 3.141592653589793;
 
 struct Vec3 {
 	T x;
@@ -62,12 +65,16 @@ struct Vec3 {
 	}
 
 	// Conversion
-	inline std::string toString() const {
-		return "{" +
-			std::to_string(this->x) + ", " +
-			std::to_string(this->y) + ", " +
+	inline std::string toString(const std::string &begin = "", const std::string &delimer = " ", const std::string &end = "") const {
+		return begin +
+			std::to_string(this->x) + delimer +
+			std::to_string(this->y) + delimer +
 			std::to_string(this->z) +
-			+"}";
+			end;
+	}
+
+	inline T norm() {
+		return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 	}
 };
 
@@ -76,14 +83,14 @@ inline void exit_with_error(const std::string &msg) {
 	exit(1);
 }
 
-
 // Looks for element inside the array
 //   > found     => return index of element inside the element
 //   > not found => return std::nullopt
+//
 // NOTE: Essentialy .find() but less ugly
 //
 template<typename Val>
-std::optional<int> find_value_in_array(const std::vector<Val> &array, Val value) {
-	for (uint k = 0; k < array.size(); ++k) if (array[k] == value) return k;
+std::optional<size_t> find_value_in_array(const std::vector<Val> &array, Val value) {
+	for (size_t k = 0; k < array.size(); ++k) if (array[k] == value) return k;
 	return std::nullopt;
 }

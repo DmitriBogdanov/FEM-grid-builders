@@ -1,16 +1,35 @@
-#include <fstream>
-
 #include "FEMGrid.h"
+
+#include <fstream>
 
 
 // #####################
 // ### Input parsing ###
 // #####################
-int main() {
-	std::string filename;
+T func(Vec3 point)
+{
+	return(10 + 5 * point.y * sin(2 * PI * point.x));
+}
 
-	std::cout << "Take input from -> ";
-	std::cin >> filename;
+bool if_output(std::string answer){
+	if (answer == "Yes" || answer == "yes")
+		return(true);
+	else
+		return(false);
+}
+
+int main() {
+	const int MAX_THREADS = omp_get_max_threads();
+	omp_set_num_threads(MAX_THREADS);
+	std::cout << "Number of threads = " << MAX_THREADS << "\n";
+
+	std::string filename = "lab4_input", answer; //For lab4 we need only one file 
+
+	std::cout << "Do you wanna output the data? (Yes/No) -> ";
+	std::cin >> answer;
+
+	//std::cout << "Take input from -> ";
+	//std::cin >> filename;
 
 	std::ifstream inFile(filename + ".txt");
 	if (!inFile.is_open()) exit_with_error("Could not open input file");
@@ -42,10 +61,10 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		FEMGrid grid;
+		FEMGrid obj;
 
-		grid.construct_grid_2(pointA, pointB, NE, type);
-		grid.save_to_file("output.txt");
+		obj.construct_grid_2(pointA, pointB, NE, type);
+		obj.export_grid("output.txt");
 
 		std::cout << ">>> Done\n";
 	}
@@ -77,27 +96,31 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		FEMGrid grid;
+		FEMGrid obj;
 
-		grid.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
-		grid.save_to_file("output.txt");
+		obj.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
+		obj.calculation(func);
+
+		obj.export_all("output");
 
 		std::cout << ">>> Done\n";
+		if (if_output(answer))
+		{
+			/// TESTING
+			auto neighboors = obj.get_elements_adjacent_to_vertex(0);
+			for (auto &el : neighboors) std::cout << "   " << el;
 
-		/// TESTING
-		auto neighboors = grid.get_elements_adjacent_to_vertex(0);
-		for (auto &el : neighboors) std::cout << "   " << el;
+			std::cout << "\n\n";
 
-		std::cout << "\n\n";
+			/// TESTING
+			auto neighboorsPoints = obj.get_vertices_adjacent_to_vertex(0);
+			for (auto &point : neighboorsPoints) std::cout << "   " << point;
 
-		/// TESTING
-		auto neighboorsPoints = grid.get_vertices_adjacent_to_vertex(0);
-		for (auto &point : neighboorsPoints) std::cout << "   " << point;
+			std::cout << "\n\n";
 
-		std::cout << "\n\n";
-
-		/// TESTING
-		for (auto &centroid : grid._centroids) std::cout << centroid.toString() << "\n";
+			/// TESTING
+			for (auto &centroid : obj._centroids) std::cout << centroid.toString() << "\n";
+		}
 	}
 	else exit_with_error("NP not 2 or 4");
 	

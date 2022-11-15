@@ -7,9 +7,50 @@
 using ID = uint;
 
 template<typename T> using Array = std::vector<T>;
+template<typename T> using Matrix = std::vector<std::vector<T>>;
 
 using Element = Array<ID>;
 using Contour = Array<ID>;
+using Function3D = std::function<T(Vec3)>;
+
+//Container for necessary calculations and further data export in txt file
+struct GridFunction {
+	Array<T> _values;
+	Array<Vec3> _element_grads;
+	Array<T> _element_integrals;
+	Array<Vec3> _vertex_grads;
+	Array<T> _vertex_integrals;
+
+	uint _number_of_elements, _number_of_vertices;
+
+	GridFunction(uint elems = 0, uint vertices = 0):_number_of_elements(elems), _number_of_vertices(vertices){
+		_values.reserve(_number_of_vertices);
+		_element_grads.reserve(_number_of_elements);
+		_element_integrals.reserve(_number_of_elements);
+		_vertex_grads.reserve(_number_of_vertices);
+		//_vertices_uintegrals.reserve(_number_of_vertices);
+	};
+
+	GridFunction(GridFunction& other) :_number_of_elements(other._number_of_elements),
+									   _number_of_vertices(other._number_of_vertices) {
+		_values.reserve(_number_of_vertices);
+		_element_grads.reserve(_number_of_elements);
+		_element_integrals.reserve(_number_of_elements);
+		_vertex_grads.reserve(_number_of_vertices);
+		//_vertices_uintegrals.reserve(_number_of_vertices);
+	};
+
+	void info() {
+		std::cout << "--------<_GridFunction_>--------" << "\n";
+		std::cout << "_values size: "			  << _values.size() << "\n";
+		std::cout << "_element_grads size: "      << _element_grads.size() << "\n";
+		std::cout << "_elements_uintegrals size: " << _element_integrals.size() << "\n";
+		std::cout << "_vertex_grads size: "      << _vertex_grads.size() << "\n";
+		std::cout << "_vertices_uintegrals size: " << _vertex_integrals.size() << "\n";
+		std::cout << "--------------------------------" << "\n";
+	}
+};
+
 
 class FEMGrid {
 public:
@@ -17,6 +58,7 @@ public:
 	Array<Vec3>    _vertices;
 	Array<Element> _elements;
 	Array<Contour> _contours;
+	GridFunction  _grid_function;
 
 	// Metadata
 	Array<Vec3>    _centroids; // centroids of elements, ASSERT(_centroids.size() == _elements.size())
@@ -27,7 +69,7 @@ private:
 
 public:
 
-	// # 2-point region contructor #
+	// # 2-pouint region contructor #
 	//  Region - Line in 3D space:
 	//    A-------------------------------B
 	//
@@ -40,11 +82,11 @@ public:
 	//    A---*---0---*---0---*---0---*---B
 	//
 	void construct_grid_2(
-		const Vec3 &inp_pointA, const Vec3 &inp_pointB,
+		const Vec3 &inp_pouintA, const Vec3 &inp_pouintB,
 		uint inp_NE, uint type
 	);
 
-	// # 4-point region contructor #
+	// # 4-pouint region contructor #
 	//  Region - 2nd order surface in 3D space:
 	//    D-----0-----0-----0-----C
 	//    |                       |
@@ -105,20 +147,39 @@ public:
 	//    A-----0-----0-----0-----B
 	//
 	void construct_grid_4(
-		const Vec3& inp_pointA, const Vec3& inp_pointB, const Vec3& inp_pointC, const Vec3& inp_pointD,
+		const Vec3& inp_pouintA, const Vec3& inp_pouintB, const Vec3& inp_pouintC, const Vec3& inp_pouintD,
 		uint inp_NE1, uint inp_NE2, uint type
 	);
 
-	void save_to_file(const std::string &filename);
+	void setup_grid_function(Function3D f);
+
+	// Export
+	void export_all(const std::string &filename) const;
+
+	void export_grid(const std::string &filename) const;
+	void export_grid_function_values(const std::string &filename) const;
+	void export_grid_function_vertex_grads(const std::string &filename) const;
+	void export_grid_function_element_grads(const std::string &filename) const;
+	void export_grid_function_vertex_integrals(const std::string &filename) const;
+	void export_grid_function_element_integrals(const std::string &filename) const;
 
 	// Getters (geometry)
 	Array<ID> get_elements_adjacent_to_vertex(ID vertex_id) const;
 	Array<ID> get_vertices_adjacent_to_vertex(ID vertex_id) const;
 
-	// Getters (computation)
-	Vec3 get_grad_at_vertex(ID vertex_id) const;
-	Vec3 get_grad_at_element(ID element_id) const;
+	// Getters (calculations)
+	void setup_grad_at_vertices();
+	void setup_grad_at_elements();
 
-	T get_integral_at_vertex(ID vertex_id) const;
-	T get_integral_at_element(ID element_id) const;
+	void setup_integral_at_vertices();
+	void setup_integral_at_elements();
+
+	void calculation(Function3D f);
 };
+
+template<typename Val>
+inline Array<Val> operator/(Array<Val> arr, Val val) {
+	Array<Val> res = arr;
+	for (uint i = 0; i < arr.size(); ++i) res[i] /= val;
+	return res;
+}

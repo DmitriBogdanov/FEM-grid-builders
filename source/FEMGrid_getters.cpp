@@ -3,7 +3,21 @@
 #include <fstream>
 
 
-void FEMGrid::save_to_file(const std::string &filename) {
+void FEMGrid::export_all(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	const std::string file_extension = ".txt";
+
+	this->export_grid(                           filename + "[grid]"                       + file_extension);
+	this->export_grid_function_values(           filename + "[function_values]"            + file_extension);
+	this->export_grid_function_vertex_grads(     filename + "[function_vertex_grads]"      + file_extension);
+	this->export_grid_function_vertex_integrals( filename + "[function_vertex_integrals]"  + file_extension);
+	this->export_grid_function_element_grads(    filename + "[function_element_grads]"     + file_extension);
+	this->export_grid_function_element_integrals(filename + "[function_element_integrals]" + file_extension);
+}
+
+void FEMGrid::export_grid(const std::string &filename) const {
 
 	std::ofstream outFile(filename);
 	if (!outFile.is_open()) exit_with_error("File creation failed");
@@ -60,6 +74,42 @@ void FEMGrid::save_to_file(const std::string &filename) {
 	}
 }
 
+void FEMGrid::export_grid_function_values(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	for (const auto &value : _grid_function._values) outFile << value << '\n';
+}
+
+void FEMGrid::export_grid_function_vertex_grads(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	for (const auto &value : _grid_function._vertex_grads) outFile << value.toString() << '\n';
+}
+
+void FEMGrid::export_grid_function_element_grads(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	for (const auto &value : _grid_function._element_grads) outFile << value.toString() << '\n';
+}
+
+void FEMGrid::export_grid_function_vertex_integrals(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	for (const auto &value : _grid_function._vertex_integrals) outFile << value << '\n';
+}
+
+void FEMGrid::export_grid_function_element_integrals(const std::string &filename) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+
+	for (const auto &value : _grid_function._element_integrals) outFile << value << '\n';
+}
+
+
 
 Array<ID> FEMGrid::get_elements_adjacent_to_vertex(ID vertex_id) const {
 	Array<ID> adjacent_elements;
@@ -81,7 +131,7 @@ Array<ID> FEMGrid::get_vertices_adjacent_to_vertex(ID vertex_id) const {
 		
 		// Element contains vertex => add 2 vertices to left/right to 'adjacent_vertices'
 		if (const auto optional = find_value_in_array(element, vertex_id)) {
-			const ID index_in_element = optional.value();
+			const ID index_in_element = static_cast<ID>(optional.value());
 
 			const ID vertex_to_left =
 				index_in_element > 0

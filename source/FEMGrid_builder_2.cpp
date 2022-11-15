@@ -1,19 +1,6 @@
 #include "FEMGrid.h"
 
 
-void FEMGrid::_setup_centroids() {
-	_centroids.reserve(_elements.size());
-
-	for (const auto &element : _elements) {
-		Vec3 centroid = { 0, 0, 0 };
-
-		const T inverseN = T(1) / element.size();
-		for (const auto &vertex_id : element) centroid += _vertices[vertex_id] * inverseN;
-
-		_centroids.push_back(std::move(centroid));
-	}
-}
-
 // Elements
 void build_elements_type_1(Array<Element> &elements, uint NE) {
 	for (uint i = 0; i < NE; ++i)
@@ -55,7 +42,7 @@ void FEMGrid::construct_grid_2(
 	}
 
 	// Vertices
-	const Vec3 increment = (inp_pointB - inp_pointA) / (NP - 1);
+	const Vec3 increment = (inp_pointB - inp_pointA) / static_cast<T>(NP - 1);
 
 	for (uint i = 0; i < NP; ++i) {
 		// Point in local coords
