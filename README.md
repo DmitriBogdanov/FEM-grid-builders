@@ -57,6 +57,14 @@ To launch "Visualization.m" one may need an access to a valid Wolfram Mathematic
 
 ## Version History
 
+* 01.03
+    * Implemented visualization of function function values, gradients and integrals on a grid
+    * Cosmetic changes to output format
+
+* 01.02
+    * Implemented computation of function values, gradients and integrals at triangular elements
+    * Implemented computation of function values, gradients and integrals at grid vertices through averaging out adjacent elements
+
 * 01.01
     * Vastly changed code structure, instead of methods writing grids straight to files was implemented a general class that can build grids, hold their metadata, operate on them and save results to a file in the same format as before
     * Changed indexation to start from 0 instead of 1, so internal indixation is the same as displayed

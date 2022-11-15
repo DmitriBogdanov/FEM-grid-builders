@@ -41,13 +41,15 @@ struct GridFunction {
 	};
 
 	void info() {
-		std::cout << "--------<_GridFunction_>--------" << "\n";
-		std::cout << "_values size: "			  << _values.size() << "\n";
-		std::cout << "_element_grads size: "      << _element_grads.size() << "\n";
-		std::cout << "_elements_uintegrals size: " << _element_integrals.size() << "\n";
-		std::cout << "_vertex_grads size: "      << _vertex_grads.size() << "\n";
-		std::cout << "_vertices_uintegrals size: " << _vertex_integrals.size() << "\n";
-		std::cout << "--------------------------------" << "\n";
+		std::cout
+			<< "\n"
+			<< "--------< GridFunction >--------" << "\n"
+			<< "_values size: "			  << _values.size() << "\n"
+			<< "_element_grads size: "      << _element_grads.size() << "\n"
+			<< "_elements_uintegrals size: " << _element_integrals.size() << "\n"
+			<< "_vertex_grads size: "      << _vertex_grads.size() << "\n"
+			<< "_vertices_uintegrals size: " << _vertex_integrals.size() << "\n"
+			<< "--------------------------------" << "\n";
 	}
 };
 
@@ -174,7 +176,7 @@ public:
 	void setup_integral_at_vertices();
 	void setup_integral_at_elements();
 
-	void calculation(Function3D f);
+	void compute_all(Function3D f);
 };
 
 template<typename Val>

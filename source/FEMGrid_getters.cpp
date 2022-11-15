@@ -4,9 +4,6 @@
 
 
 void FEMGrid::export_all(const std::string &filename) const {
-	std::ofstream outFile(filename);
-	if (!outFile.is_open()) exit_with_error("File creation failed");
-
 	const std::string file_extension = ".txt";
 
 	this->export_grid(                           filename + "[grid]"                       + file_extension);

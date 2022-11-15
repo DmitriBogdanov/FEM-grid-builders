@@ -8,7 +8,7 @@
 #include <omp.h>
 
 using T = double;
-using uint = unsigned long long;
+using uint = unsigned int;
 static const double PI = 3.141592653589793;
 
 struct Vec3 {

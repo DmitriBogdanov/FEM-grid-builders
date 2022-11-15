@@ -6,33 +6,45 @@
 // #####################
 // ### Input parsing ###
 // #####################
-T func(Vec3 point)
-{
+T func(Vec3 point) {
 	return(10 + 5 * point.y * sin(2 * PI * point.x));
 }
 
-bool if_output(std::string answer){
-	if (answer == "Yes" || answer == "yes")
-		return(true);
-	else
-		return(false);
+bool query_is_yes(const std::string &query){
+	return
+		query == "Yes"        || query == "yes"        ||
+		query == "Indeed"     || query == "indeed"     ||
+		query == "Absolutely" || query == "absolutely" ||
+		query == "Definitely" || query == "definitely" ||
+		query == "Ofc"        || query == "ofc"        ||
+		query == "Of course"  || query == "of course"  ||
+		query == "Si"         || query == "si"         ||
+		query == "Da"         || query == "da"         ||
+		query == "Jawohl"     || query == "jawohl";
 }
 
 int main() {
+	// Set up OpenMP
 	const int MAX_THREADS = omp_get_max_threads();
 	omp_set_num_threads(MAX_THREADS);
-	std::cout << "Number of threads = " << MAX_THREADS << "\n";
+	std::cout << ">>> OpenMP: " << MAX_THREADS << " threads detected and set\n\n";
 
-	std::string filename = "lab4_input", answer; //For lab4 we need only one file 
+	// Set up input file
+	std::string inputFilename;
+	std::cout << "Take input from -> ";
+	std::cin >> inputFilename;
 
-	std::cout << "Do you wanna output the data? (Yes/No) -> ";
-	std::cin >> answer;
+	std::cout << "\n";
 
-	//std::cout << "Take input from -> ";
-	//std::cin >> filename;
-
-	std::ifstream inFile(filename + ".txt");
+	std::ifstream inFile(inputFilename + ".txt");
 	if (!inFile.is_open()) exit_with_error("Could not open input file");
+
+	// Config
+	std::string	query;
+	std::cout << "Output additional info? (Yes/No) -> ";
+	std::cin >> query;
+
+	std::cout << "\n>>> Input read:\n";
 
 	// Read number of points (2 or 4)
 	uint NP;
@@ -96,30 +108,35 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		FEMGrid obj;
+		FEMGrid grid;
 
-		obj.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
-		obj.calculation(func);
+		grid.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
+		grid.compute_all(func);
 
-		obj.export_all("output");
+		grid.export_all("output");
 
-		std::cout << ">>> Done\n";
-		if (if_output(answer))
-		{
-			/// TESTING
-			auto neighboors = obj.get_elements_adjacent_to_vertex(0);
-			for (auto &el : neighboors) std::cout << "   " << el;
+		std::cout << "\n>>> Done\n\n";
 
-			std::cout << "\n\n";
+		if (query_is_yes(query)) {
+			std::cout << ">>> Additional info:\n";
 
-			/// TESTING
-			auto neighboorsPoints = obj.get_vertices_adjacent_to_vertex(0);
-			for (auto &point : neighboorsPoints) std::cout << "   " << point;
+			if (!grid._centroids.empty())
+				std::cout << "- Centroids were computed\n";
 
-			std::cout << "\n\n";
+			if (!grid._grid_function._values.empty())
+				std::cout << "- Function values were computed\n";
 
-			/// TESTING
-			for (auto &centroid : obj._centroids) std::cout << centroid.toString() << "\n";
+			if (!grid._grid_function._element_grads.empty())
+				std::cout << "- Function element grads were computed\n";
+
+			if (!grid._grid_function._element_integrals.empty())
+				std::cout << "- Function element integrals were computed\n";
+
+			if (!grid._grid_function._vertex_grads.empty())
+				std::cout << "- Function vertex grads were computed\n";
+
+			if (!grid._grid_function._vertex_integrals.empty())
+				std::cout << "- Function vertex integrals were computed\n";
 		}
 	}
 	else exit_with_error("NP not 2 or 4");

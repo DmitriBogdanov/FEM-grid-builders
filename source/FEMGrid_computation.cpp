@@ -14,8 +14,8 @@ Array<T> mult(Matrix<T> A, Array<T> b) {
 	Array<T> res(N, 0);
 	
 	#pragma omp parallel for schedule(static)
-	for (int i = 0; i < N; ++i)
-		for (int j = 0; j < M; ++j)
+	for (int i = 0; i < static_cast<int>(N); ++i)
+		for (int j = 0; j < static_cast<int>(M); ++j)
 			res[i] += A[i][j] * b[j];
 
 	return res;
@@ -109,8 +109,8 @@ void FEMGrid::setup_grad_at_vertices() {
 	Matrix<T> Ax(_vertices.size());
 	
 	#pragma omp parallel for schedule(static)
-	for (int i = 0; i < _vertices.size(); ++i)
-		for (int j = 0; j < _elements.size(); ++j)
+	for (int i = 0; i < static_cast<int>(_vertices.size()); ++i)
+		for (int j = 0; j < static_cast<int>(_elements.size()); ++j)
 			Ax[i].push_back(T(0));
 	
 	Matrix<T> Ay = Ax, Az = Ax;
@@ -119,7 +119,7 @@ void FEMGrid::setup_grad_at_vertices() {
 
 	Array<T> S_totals(_vertices.size(), 0);
 	#pragma omp parallel for schedule(static)
-	for (int elem = 0; elem < _elements.size(); ++elem) {
+	for (int elem = 0; elem < static_cast<int>(_elements.size()); ++elem) {
 		const ID i = _elements[elem][0], j = _elements[elem][1], k = _elements[elem][2];
 
 		const T S = triangle_area(_vertices[i], _vertices[j], _vertices[k]);
@@ -154,15 +154,15 @@ void FEMGrid::setup_integral_at_vertices() {
 	Matrix<T> A(_vertices.size());
 
 	#pragma omp parallel for schedule(static)
-	for (int i = 0; i < _vertices.size(); ++i)
-		for (int j = 0; j < _elements.size(); ++j)
+	for (int i = 0; i < static_cast<int>(_vertices.size()); ++i)
+		for (int j = 0; j < static_cast<int>(_elements.size()); ++j)
 			A[i].push_back(T(0));
 
 	Array<T> S_totals(_vertices.size(), 0);
 
 	// Assembling three matrices
 	#pragma omp parallel for schedule(static)
-	for (int elem = 0; elem < _elements.size(); ++elem) {
+	for (int elem = 0; elem < static_cast<int>(_elements.size()); ++elem) {
 		const ID i = _elements[elem][0], j = _elements[elem][1], k = _elements[elem][2];
 
 		const T S = triangle_area(_vertices[i], _vertices[j], _vertices[k]);
@@ -184,7 +184,7 @@ void FEMGrid::setup_integral_at_vertices() {
 		_grid_function._vertex_integrals[i] /= S_totals[i];
 }
 
-void FEMGrid::calculation(Function3D f) {
+void FEMGrid::compute_all(Function3D f) {
 	this->setup_grid_function(f);
 
 	std::cout << ">>>>>> Starting setup_grad_at_elements...\n";
