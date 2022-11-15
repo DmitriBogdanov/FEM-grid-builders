@@ -73,10 +73,10 @@ int main() {
 			<< "type = " << type << "\n\n"
 			<< ">>> Building the grid..." << "\n";
 
-		FEMGrid obj;
+		FEMGrid grid;
 
-		obj.construct_grid_2(pointA, pointB, NE, type);
-		obj.export_grid("output.txt");
+		grid.construct_grid_2(pointA, pointB, NE, type);
+		grid.export_grid("output[grid].txt");
 
 		std::cout << ">>> Done\n";
 	}
@@ -111,9 +111,17 @@ int main() {
 		FEMGrid grid;
 
 		grid.construct_grid_4(pointA, pointB, pointC, pointD, NE1, NE2, type);
-		grid.compute_all(func);
 
-		grid.export_all("output");
+		// Grid function is only computed for triangular elements
+		if (type == 1) {
+			grid.export_grid("output[grid].txt");
+			std::cout << "NOTE: Grid function is not computed for quadrilateral elements\n";
+		}
+		else {
+			grid.compute_all(func);
+			grid.export_all("output");
+		}
+		
 
 		std::cout << "\n>>> Done\n\n";
 

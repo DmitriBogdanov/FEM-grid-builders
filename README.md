@@ -57,6 +57,9 @@ To launch "Visualization.m" one may need an access to a valid Wolfram Mathematic
 
 ## Version History
 
+* 01.04
+    * Added more safety checks
+
 * 01.03
     * Implemented visualization of function function values, gradients and integrals on a grid
     * Cosmetic changes to output format
