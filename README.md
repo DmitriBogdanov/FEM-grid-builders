@@ -2,7 +2,7 @@
 
 Contains various grid builders for finite element method. Grid builders implemented in C++, visualization done through "Wolfram Mathematica" package.
 
-2D triangular elements also support computation of grid function $$f(x, y, z)$$, its' integrals and gradients on each element. Same values can be obtained for vertices through averaging out adjacent elements, using areas as weights. For a "free" point outside of grid vertices such values are computed through barycentric coordinates inside the enclosing element.
+2D triangular elements also support computation of grid function $f(x, y, z)$, its' integrals and gradients on each element. Same values can be obtained for vertices through averaging out adjacent elements, using areas as weights. For a "free" point outside of grid vertices such values are computed through barycentric coordinates inside the enclosing element.
 
 ## 1D grids
 
