@@ -1,6 +1,8 @@
-# FEM (Finite Element Method) grid builders
+# FEM (Finite Element Method) grid builder
 
 Contains various grid builders for finite element method. Grid builders implemented in C++, visualization done through "Wolfram Mathematica" package.
+
+2D triangular elements also support computation of grid function $$f(x, y, z)$$, its' integrals and gradients on each element. Same values can be obtained for vertices through averaging out adjacent elements, using areas as weights. For a "free" point outside of grid vertices such values are computed through barycentric coordinates inside the enclosing element.
 
 ## 1D grids
 
@@ -15,7 +17,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 
 ## 2D grids
 
-2D area - 2nd order surface defined by 4 points in space.
+2D area - 2nd order surface defined by 4 points in space. Following examples use flat rectangular regions to better demonstrate element geometry.
 
 * Elements with quadrilateral base
 
@@ -33,6 +35,12 @@ Contains various grid builders for finite element method. Grid builders implemen
 
 <img src="images/example_points_4_type_4.png" width=40% height=40%>
 
+## Grid Function
+
+Following example demonstrates visualization of function values and grads at grid vertices.
+
+<img src="images/example_grid_function.png" width=40% height=40%>
+
 ## Usage
 
 | Input file format                          |                                                                            |
@@ -42,7 +50,7 @@ Contains various grid builders for finite element method. Grid builders implemen
 | NE1 NE2                                    | Number of elements on a line (1 value for 2 points, 2 values for 4 points) |
 | type                                       | Type of the element (for 2 point - 1 or 2, for 4 point - 1, 2, 3 or 4)     |
 
-NOTE: By default both "main.cpp" and "Visualization.m" look for files in the current folder.
+NOTE: By default both "main.cpp" and "Visualization.wl" look for files in the current folder.
 
 | Output file format                                                                              |                                                                                               |
 |-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -53,9 +61,14 @@ NOTE: By default both "main.cpp" and "Visualization.m" look for files in the cur
 
 ## Requirements
 
-To launch "Visualization.m" one may need an access to a valid Wolfram Mathematica license.
+To launch "Visualization.wl" one may need an access to a valid Wolfram Mathematica license.
 
 ## Version History
+
+* 01.05
+    * Added method for computing barycentric coordinates of a point
+    * Added method that finds element containing given point
+    * Added method that exports function value, integral and grad based on point coords
 
 * 01.04
     * Added more safety checks

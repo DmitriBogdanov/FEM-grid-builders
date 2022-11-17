@@ -7,7 +7,7 @@
 // ### Input parsing ###
 // #####################
 T func(Vec3 point) {
-	return(10 + 5 * point.y * sin(2 * PI * point.x));
+	return 10 + 5 * point.y * sin(2 * PI * point.x);
 }
 
 bool query_is_yes(const std::string &query){
@@ -120,6 +120,10 @@ int main() {
 		else {
 			grid.compute_all(func);
 			grid.export_all("output");
+
+			const Vec3 test_point = { 5, 5, 0 };
+			std::cout << "Test_point found in element: " << grid.get_element_containing_point(test_point);
+			grid.export_function_at_point("output[point].txt", test_point);
 		}
 		
 

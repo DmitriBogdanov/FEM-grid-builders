@@ -78,6 +78,15 @@ struct Vec3 {
 	}
 };
 
+inline T triangle_area(const Vec3 &a, const Vec3 &b, const Vec3 &c) {
+	Vec3 AB = a - b, AC = a - c;
+	Vec3 res(AB.y * AC.z - AC.y * AB.z, AB.z * AC.x - AC.z * AB.x, AB.x * AC.y - AC.x * AB.y);
+	return res.norm() / T(2);
+}
+
+
+inline T sqr(T val) { return val * val; }
+
 inline void exit_with_error(const std::string &msg) {
 	std::cout << "ERROR: " << msg << "\n";
 	exit(1);
@@ -93,4 +102,15 @@ template<typename Val>
 std::optional<size_t> find_value_in_array(const std::vector<Val> &array, Val value) {
 	for (size_t k = 0; k < array.size(); ++k) if (array[k] == value) return k;
 	return std::nullopt;
+}
+
+template<typename _Ty>
+T sum_of_array(const _Ty &array) {
+	T sum = 0;
+	for (const auto &el : array) sum += el;
+	return sum;
+}
+
+inline Vec3 project_onto_plane(const Vec3 &point) {
+	return Vec3(point.x, point.y, 0);
 }

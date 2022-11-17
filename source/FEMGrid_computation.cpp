@@ -1,10 +1,5 @@
 #include "FEMGrid.h"
 
-T triangle_area(Vec3 a, Vec3 b, Vec3 c) {
-	Vec3 AB = a - b, AC = a - c;
-	Vec3 res(AB.y * AC.z - AC.y * AB.z, AB.z * AC.x - AC.z * AB.x, AB.x * AC.y - AC.x * AB.y);
-	return res.norm() / T(2);
-}
 
 // Multiplication matrix dot vector
 Array<T> mult(Matrix<T> A, Array<T> b) {

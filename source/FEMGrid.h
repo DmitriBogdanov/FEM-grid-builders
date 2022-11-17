@@ -164,10 +164,16 @@ public:
 	void export_grid_function_element_grads(const std::string &filename) const;
 	void export_grid_function_vertex_integrals(const std::string &filename) const;
 	void export_grid_function_element_integrals(const std::string &filename) const;
+	
 
 	// Getters (geometry)
 	Array<ID> get_elements_adjacent_to_vertex(ID vertex_id) const;
 	Array<ID> get_vertices_adjacent_to_vertex(ID vertex_id) const;
+
+	// 'Free' point getters
+	Array<T> point_barycentric_coords(const Vec3 &point, ID element) const;
+	ID get_element_containing_point(const Vec3 &point) const;
+	void export_function_at_point(const std::string &filename, const Vec3 &point) const;
 
 	// Getters (calculations)
 	void setup_grad_at_vertices();

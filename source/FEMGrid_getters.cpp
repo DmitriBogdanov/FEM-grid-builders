@@ -152,3 +152,66 @@ Array<ID> FEMGrid::get_vertices_adjacent_to_vertex(ID vertex_id) const {
 
 	return adjacent_vertices;
 }
+
+Array<T> FEMGrid::point_barycentric_coords(const Vec3 &point, ID element_id) const {
+	const auto &element = _elements[element_id];
+
+	Array<T> result(element.size() - 1);
+
+	// Get total area of element
+	const T element_area = triangle_area(
+		project_onto_plane(_vertices[element[0]]),
+		project_onto_plane(_vertices[element[1]]),
+		project_onto_plane(_vertices[element[2]])
+	);
+		/// For non-triangular elements we would have to go over all triangles formed by
+		/// connecting first vertex and element sides and add together a total area
+	
+	for (size_t k = 0; k < result.size(); ++k) {
+		// k-th barycentric coord is a ratio of 2 areas
+		result[k] = triangle_area(
+			project_onto_plane(_vertices[element[k]]),
+			project_onto_plane(_vertices[element[k + 1]]),
+			project_onto_plane(point)
+		) / element_area;
+	}
+
+	return result;
+}
+
+ID FEMGrid::get_element_containing_point(const Vec3 &point) const {
+	for (ID element_id = 0; element_id < _elements.size(); ++element_id)
+		// NOTE: If sum of barycentric coords is less than 1 => point is inside the element
+		if (sum_of_array(this->point_barycentric_coords(point, element_id)) < 1 + 1e-12)
+			return element_id;
+
+	exit_with_error("Could not find test point inside the region");
+}
+
+void FEMGrid::export_function_at_point(const std::string &filename, const Vec3 &point) const {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) exit_with_error("File creation failed");
+	
+	const ID element_id = this->get_element_containing_point(point);
+	const auto &element = _elements[element_id];
+
+	const auto barycentric_coords = this->point_barycentric_coords(point, element_id);
+
+	// Compute function value using barycentric coords
+	T function_value = 0;
+
+	for (size_t k = 0; k < element.size() - 1; ++k) {
+		function_value += barycentric_coords[k] * _grid_function._values[element[k]];
+	}
+
+	// Export to file
+	outFile
+		// ID of element
+		<< element_id << "\n"
+		// Function value
+		<< function_value << "\n"
+		// Function integral
+		<< _grid_function._element_integrals[element_id] << "\n"
+		// Function grad
+		<< _grid_function._element_grads[element_id].toString();
+}
