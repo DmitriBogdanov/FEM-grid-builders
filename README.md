@@ -66,6 +66,9 @@ To launch "Visualization.wl" one may need an access to a valid Wolfram Mathemati
 
 ## Version History
 
+* 01.06
+    * Removed OpenMP parallelism due to bugs in order of operation that it caused
+
 * 01.05
     * Added method for computing barycentric coordinates of a point
     * Added method that finds element containing given point

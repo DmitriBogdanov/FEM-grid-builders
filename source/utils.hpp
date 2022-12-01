@@ -5,7 +5,6 @@
 #include <string>
 #include <optional>
 #include <functional>
-#include <omp.h>
 
 using T = double;
 using uint = unsigned int;

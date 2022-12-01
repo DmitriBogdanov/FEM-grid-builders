@@ -1,5 +1,7 @@
 #include "FEMGrid.h"
 
+#include "static_timer.hpp"
+
 
 // Multiplication matrix dot vector
 Array<T> mult(Matrix<T> A, Array<T> b) {
@@ -8,7 +10,6 @@ Array<T> mult(Matrix<T> A, Array<T> b) {
 	ID N = A.size(), M = b.size();
 	Array<T> res(N, 0);
 	
-	#pragma omp parallel for schedule(static)
 	for (int i = 0; i < static_cast<int>(N); ++i)
 		for (int j = 0; j < static_cast<int>(M); ++j)
 			res[i] += A[i][j] * b[j];
@@ -103,7 +104,6 @@ void FEMGrid::setup_grad_at_vertices() {
 	
 	Matrix<T> Ax(_vertices.size());
 	
-	#pragma omp parallel for schedule(static)
 	for (int i = 0; i < static_cast<int>(_vertices.size()); ++i)
 		for (int j = 0; j < static_cast<int>(_elements.size()); ++j)
 			Ax[i].push_back(T(0));
@@ -113,7 +113,7 @@ void FEMGrid::setup_grad_at_vertices() {
 	//Assembling three matrices
 
 	Array<T> S_totals(_vertices.size(), 0);
-	#pragma omp parallel for schedule(static)
+
 	for (int elem = 0; elem < static_cast<int>(_elements.size()); ++elem) {
 		const ID i = _elements[elem][0], j = _elements[elem][1], k = _elements[elem][2];
 
@@ -148,7 +148,6 @@ void FEMGrid::setup_integral_at_vertices() {
 	if (_grid_function._element_integrals.empty()) exit_with_error("Elements' integrals are not calculated.");
 	Matrix<T> A(_vertices.size());
 
-	#pragma omp parallel for schedule(static)
 	for (int i = 0; i < static_cast<int>(_vertices.size()); ++i)
 		for (int j = 0; j < static_cast<int>(_elements.size()); ++j)
 			A[i].push_back(T(0));
@@ -156,11 +155,11 @@ void FEMGrid::setup_integral_at_vertices() {
 	Array<T> S_totals(_vertices.size(), 0);
 
 	// Assembling three matrices
-	#pragma omp parallel for schedule(static)
 	for (int elem = 0; elem < static_cast<int>(_elements.size()); ++elem) {
 		const ID i = _elements[elem][0], j = _elements[elem][1], k = _elements[elem][2];
 
 		const T S = triangle_area(_vertices[i], _vertices[j], _vertices[k]);
+		//S_totals[elem] += S;
 		S_totals[i] += S; S_totals[j] += S; S_totals[k] += S;
 
 		A[i][elem] = S * _grid_function._element_integrals[elem];
@@ -172,7 +171,7 @@ void FEMGrid::setup_integral_at_vertices() {
 	
 	Array<T> b(_elements.size(), 1);
 
-	/// VERY slow. Need sparse matrix implementation or more powerful logic of all algorithm
+	/// VERY slow. Need sparse matrix implementation or directly implemented summation
 	_grid_function._vertex_integrals = mult(A, b);
 
 	for (size_t i = 0; i < _grid_function._vertex_integrals.size(); ++i)
@@ -183,23 +182,23 @@ void FEMGrid::compute_all(Function3D f) {
 	this->setup_grid_function(f);
 
 	std::cout << ">>>>>> Starting setup_grad_at_elements...\n";
-	auto start = omp_get_wtick();
+	StaticTimer::start();
 	this->setup_grad_at_elements();
-	std::cout << ">>>>>> Done " << omp_get_wtick() - start << " sec.\n";
+	std::cout << ">>>>>> Done " << StaticTimer::end() << " sec.\n";
 
 	std::cout << ">>>>>> Starting setup_integral_at_elements...\n";
-	start = omp_get_wtick();
+	StaticTimer::start();
 	this->setup_integral_at_elements();
-	std::cout << ">>>>>> Done " << omp_get_wtick() - start << " sec.\n";
+	std::cout << ">>>>>> Done " << StaticTimer::end() << " sec.\n";
 
 	std::cout << ">>>>>> Starting setup_grad_at_vertices...\n";
-	start = omp_get_wtick();
+	StaticTimer::start();
 	this->setup_grad_at_vertices();
-	std::cout << ">>>>>> Done " << omp_get_wtick() - start << " sec.\n";
+	std::cout << ">>>>>> Done " << StaticTimer::end() << " sec.\n";
 
 	std::cout << ">>>>>> Starting setup_integral_at_vertices...\n";
-	start = omp_get_wtick();
+	StaticTimer::start();
 	this->setup_integral_at_vertices();
-	std::cout << ">>>>>> Done " << omp_get_wtick() - start << " sec.\n";
+	std::cout << ">>>>>> Done " << StaticTimer::end() << " sec.\n";
 	this->_grid_function.info();
 }

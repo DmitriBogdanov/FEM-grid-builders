@@ -24,11 +24,6 @@ bool query_is_yes(const std::string &query){
 }
 
 int main() {
-	// Set up OpenMP
-	const int MAX_THREADS = omp_get_max_threads();
-	omp_set_num_threads(MAX_THREADS);
-	std::cout << ">>> OpenMP: " << MAX_THREADS << " threads detected and set\n\n";
-
 	// Set up input file
 	std::string inputFilename;
 	std::cout << "Take input from -> ";
